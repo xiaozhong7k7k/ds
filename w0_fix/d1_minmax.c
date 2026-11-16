@@ -4,7 +4,7 @@ void minmax(int a[],int *min,int *max,int n)
 {
     *min = a[0];
     *max = a[0];
-    for(int i = 0 ; i<n-1 ; i++ ){
+    for(int i = 0 ; i<n ; i++ ){
         if(a[i]<*min){
             *min = a[i];
         }
