@@ -17,7 +17,7 @@ int main(void)
         }
         printf("\n");
     }else {
-        fprintf(stderr,n,内存分配失败);
+        fprintf(stderr,"内存分配失败: n=%d\n",n);
         return 1;
     }
 
