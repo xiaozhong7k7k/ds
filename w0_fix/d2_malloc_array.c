@@ -4,12 +4,22 @@
 int  *array_create(int n);
 void  array_destroy(int *a); 
 
-int main()
+int main(void)
 {
     int n;
     scanf("%d",&n);
+    if(n <= 0){ return 0; }
 
     int *p = array_create(n);
+    if(p != NULL ){
+        for(int i = 0 ; i<n ; i++){
+            printf("%d ",p[i]);
+        }
+        printf("\n");
+    }else {
+        fprintf(stderr,n,å†…å­˜åˆ†é…å¤±è´¥);
+        return 1;
+    }
 
     array_destroy(p);
     p = NULL;
@@ -19,16 +29,15 @@ int main()
 
 int  *array_create(int n)
 {
-    if(n == 0){ return NULL;}
     int *p = (int*)malloc(sizeof(int)*n);
+    if(p == NULL){ return NULL; }
     for(int i = 0 ; i<n ; i++){
         p[i] = i+1;
-        printf("%d ",p[i]);
     }
     return p;
 }
 
 void array_destroy(int *a)
 {
-    free(a);//ÓÃÒ»¼¶Ö¸Õë£¬ÈÃÓÃ»§×Ô¼ºÖÃ¿Õ
+    free(a);//ç”¨ä¸€çº§æŒ‡é’ˆï¼Œè®©ç”¨æˆ·è‡ªå·±ç½®ç©º
 }
