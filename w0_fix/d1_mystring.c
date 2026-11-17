@@ -12,7 +12,7 @@ int  my_strlen(const char *s)
 
 void my_strcpy(char *dst, const char *src)
 {
-    while(*dst++ = *src++) ;//¸´ÖÆµ½¡®\0¡¯Ñ­»·½áÊø£¬¸³Öµ±í´ïÊ½µÄ½á¹ûÊÇ¸³½øÈ¥µÄÖµ
+    while(*dst++ = *src++) ;//å¤åˆ¶åˆ°â€˜\0â€™å¾ªç¯ç»“æŸï¼Œèµ‹å€¼è¡¨è¾¾å¼çš„ç»“æœæ˜¯èµ‹è¿›å»çš„å€¼
 }
 
 int main()
