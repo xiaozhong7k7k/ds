@@ -5,14 +5,16 @@ int *grow(int *old, int old_n, int new_n);
 
 int main()
 {
+    int len = 10;
     int *old = (int*)malloc(sizeof(int)*10);
     for(int i = 0; i<10 ; i++){
         old[i] = i+1;
         printf("%d ",old[i]);
     }
-    old = grow(old,10,20);
-    old = grow(old,20,40);
-    old = grow(old,40,80);
+    printf("\n");
+    old = grow(old,len,20);
+    old = grow(old,len,40);
+    old = grow(old,len,80);
     free(old);
     old = NULL;
 
@@ -25,7 +27,9 @@ int *grow(int *old, int old_n, int new_n)
     if(new ==NULL){ return NULL; }
     for(int i = 0 ; i<old_n ; i++){
         new[i] = old[i];
+        printf("%d ",new[i]);
     }
+    printf("\n");
     free(old);//用户自己置空
     return new;
 }
