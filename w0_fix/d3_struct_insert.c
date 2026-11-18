@@ -25,7 +25,7 @@ int main()
     print(a);
     destroy(a);
 
-    Node *b = build(n);
+    Node *b = build_head(n);
     print(b);
     destroy(b);
 
@@ -60,10 +60,11 @@ Node *build_head(int n)
     for(int i = 0 ; i<n ; i++){
         Node *p = (Node*)malloc(sizeof(Node));
         if(p == NULL){ return NULL; }
-        Node *temp = p;
-        temp->next = head;
-        head = temp;
+        p->val = i+1;
+        p->next = head;
+        head = p;
     }
+    return head;
 }
 
 void  print(Node *head)

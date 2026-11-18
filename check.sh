@@ -25,7 +25,7 @@ out="bin/$base"
 mkdir -p bin
 
 echo "=== 1/3 编译：$src ==="
-if ! gcc -Wall -Wextra -g "$src" -o "$out"; then
+if ! gcc -Wall -Wextra -Werror -g "$src" -o "$out"; then
   echo
   echo "❌ 编译失败。先修上面的报错（VS Code 里是红线），不要运行。"
   exit 1
