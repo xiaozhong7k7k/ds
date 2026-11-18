@@ -110,7 +110,7 @@ int  length(Node *head)
 Node *find(Node *head, int val)
 {
     if(head == NULL){ return NULL; }
-    Node *cur = head;                   //这里的cur
+    Node *cur = head;                 //这里的cur不能在为NULL的时候解引用，否则就是对悬空指针的操作
     while(cur != NULL && cur->val != val){//不知道边界情况就用while
         cur = cur->next;
     }
