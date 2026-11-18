@@ -110,11 +110,9 @@ int  length(Node *head)
 Node *find(Node *head, int val)
 {
     if(head == NULL){ return NULL; }
-    Node *cur = head;
-    for( ; cur->val != val ; cur = cur->next){//找到就凭循环条件退出，此时的cur就是目标节点
-        if(cur == NULL){//找不到就凭借if退出，返回的cur此时就是NULL
-            break;
-        }
+    Node *cur = head;                   //这里的cur
+    while(cur != NULL && cur->val != val){//不知道边界情况就用while
+        cur = cur->next;
     }
     return cur;
 }
