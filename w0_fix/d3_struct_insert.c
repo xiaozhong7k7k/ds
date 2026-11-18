@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct Node { 
+typedef struct Node{ 
     int val;
     struct Node *next;
  } Node;
@@ -12,6 +12,7 @@ typedef struct Node {
 // }MemoryPool;
 
 Node *build(int n);// 尾插，1..n
+Node *build_head(int n);   // 头插建 1..n
 void  print(Node *head);// 1 -> 2 -> ... -> n
 void  destroy(Node *head);//释放链表
 
@@ -20,9 +21,13 @@ int main()
     int n;
     scanf("%d",&n);
 
-    Node *head = build(n);
-    print(head);
-    destroy(head);
+    Node *a = build(n);
+    print(a);
+    destroy(a);
+
+    Node *b = build(n);
+    print(b);
+    destroy(b);
 
     return 0;
 }
@@ -47,6 +52,18 @@ Node *build(int n)//用栈上的指针接着malloc出的内存没问题，只要
     tail->val = i+1;
     }
     return head;
+}
+
+Node *build_head(int n)
+{
+    Node *head = NULL;
+    for(int i = 0 ; i<n ; i++){
+        Node *p = (Node*)malloc(sizeof(Node));
+        if(p == NULL){ return NULL; }
+        Node *temp = p;
+        temp->next = head;
+        head = temp;
+    }
 }
 
 void  print(Node *head)
