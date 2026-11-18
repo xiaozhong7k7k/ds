@@ -10,8 +10,9 @@ int sum_of(int *a, int n)
 
 int main()
 {
-    int a[5] = {4,2,5,8,6};
-    int sum = sum_of(a,5);
+    //int a[5] = {4,2,5,8,6};
+    int a[1] = {3};
+    int sum = sum_of(a,1);
     printf("%d\n",sum);
 
     return 0;

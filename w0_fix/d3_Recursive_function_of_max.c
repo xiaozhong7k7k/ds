@@ -12,8 +12,10 @@ int max_of(int *a,int n)
 
 int main()
 {
-    int a[3] = {9,1,2};
-    int max = max_of(a,3);
+    //int a[3] = {9,1,2};
+    //int a[3] = {-2,-5,-9};
+    int a[1] = {7};
+    int max = max_of(a,1);
     printf("%d\n",max);
 
     return 0;
