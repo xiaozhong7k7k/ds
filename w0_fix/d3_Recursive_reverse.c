@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<string.h>
 
 void reverse(char *s, int left, int right)
 {
@@ -12,7 +13,7 @@ void reverse(char *s, int left, int right)
 int main(void)
 {
     char s[] = {"hello"};
-    reverse(s,0,4);
+    reverse(s,0,strlen(s)-1);
     printf("%s ",s);
 
     return 0;
