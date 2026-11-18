@@ -18,32 +18,32 @@ void  destroy(Node *head);//释放链表
 int main()
 {
     int n;
-    scanf("%d",n);
+    scanf("%d",&n);
 
-    Node *head = build(5);
+    Node *head = build(n);
     print(head);
     destroy(head);
 
     return 0;
 }
 
-Node *build(int n)
+Node *build(int n)//用栈上的指针接着malloc出的内存没问题，只要在换作用域的时候拿新的指针接住就行
 {
     Node *head = NULL;
     Node *tail = head;
     for(int i = 0; i<n ; i++){
     Node *p = (Node*)malloc(sizeof(Node));
     if(p == NULL){
-        printf("内存分配失败");
+        printf("内存分配失败");//防呆
         return NULL;
     }
     if(head == NULL){
         head = tail = p;
     }else{
-        tail->next = p;
+        tail->next = p;//尾插
         tail = p;
     }
-    tail->next = NULL;
+    tail->next = NULL;//初始化
     tail->val = i+1;
     }
     return head;
@@ -53,14 +53,17 @@ void  print(Node *head)
 {
     Node *cur = head;
     for( cur = head ; cur!= NULL ; cur = cur->next){
-        printf("%d ",cur->val);
+        printf("%d -> ",cur->val);//链表这么打印
     }
+    printf("NULL\n");
 }
 
 void  destroy(Node *head)
 {
     Node *temp = head;
-    for( temp = head ; temp!=NULL ; temp = temp->next){
+    while(temp != NULL){
+        Node *next = temp->next;//如果用temp = temp->next，就相当于再次调用了free完的悬空指针
         free(temp);
+        temp = next;
     }
 }
