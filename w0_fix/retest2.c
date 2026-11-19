@@ -48,23 +48,30 @@ Node *reverse_rec(Node *head)
  */
 int **grid_create(int rows, int cols)
 {
-    int **m = (int**)malloc(sizeof(int*)*rows);
-    if(m == NULL){ return NULL; }
-
-    m[0] = (int*)malloc(sizeof(int)*rows*cols);
-    for(int i = 0; i<rows ; i++){
-        m[i] = m[0] + i*cols;
-        if(m[i] == NULL){
-            for(int cnt = 0; cnt<i ; cnt++){
-                free(m[cnt]);
-            }
-            free(m);
-            return NULL;
-        }
-        for(int j = 0; j<cols ; j++){
-            m[i][j] = i*cols + j;
-        }
-    }
+    // int **m = (int**)malloc(sizeof(int*)*rows);
+    // if(m == NULL){ return NULL; }
+    // m[0] = (int*)malloc(sizeof(int)*rows*cols);
+    // for(int i = 0; i<rows ; i++){
+    //     m[i] = m[0] + i*cols;
+    //     if(m[i] == NULL){
+    //         for(int cnt = 0; cnt<i ; cnt++){
+    //             free(m[cnt]);
+    //         }
+    //         free(m);
+    //         return NULL;
+    //     }
+    // for(int j = 0; j<cols ; j++){
+    //         m[i][j] = i*cols + j;
+    //     }
+    // }
+    int **m = malloc(sizeof(int*) * rows);
+    if (m == NULL) return NULL;
+    int *block = malloc(sizeof(int) * rows * cols);   /* 先拿到整块的首地址 */
+    if (block == NULL) { free(m); return NULL; }      /* 第二块失败：只回滚第一块 block指向的内存在m里*/
+    for (int i = 0; i < rows; i++) {
+        m[i] = block + i * cols;
+        for (int j = 0; j < cols; j++) m[i][j] = i * cols + j;
+    } 
     return m;
 }
 
