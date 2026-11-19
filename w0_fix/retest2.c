@@ -24,9 +24,21 @@ int sum_list(Node *head)
  */
 Node *reverse_rec(Node *head)
 {
-    
-    
-}
+    // Node *prev = NULL;
+    // Node *cur = head;
+    // while(cur != NULL){
+    //  Node *next = cur->next;
+    //  cur->next = prev;
+    //  prev = cur;
+    //  cur = next;
+    //}
+    //     return prev;
+    if(head == NULL || head->next == NULL){ return head; }
+    Node *new_head = reverse_rec(head->next);
+    head->next->next = head;
+    head->next = NULL;
+    return new_head;
+ }
 
 /* ---------- 3. 二维数组：一整块连续内存 ----------
  * 第一步 malloc rows 个 int* ——行指针数组
@@ -36,14 +48,39 @@ Node *reverse_rec(Node *head)
  */
 int **grid_create(int rows, int cols)
 {
-    
-    return NULL;
+    int **m = (int**)malloc(sizeof(int*)*rows);
+    if(m == NULL){ return NULL; }
+
+    m[0] = (int*)malloc(sizeof(int)*rows*cols);
+    for(int i = 0; i<rows ; i++){
+        m[i] = m[0] + i*cols;
+        if(m[i] == NULL){
+            for(int cnt = 0; cnt<i ; cnt++){
+                free(m[cnt]);
+            }
+            free(m);
+            return NULL;
+        }
+        for(int j = 0; j<cols ; j++){
+            m[i][j] = i*cols + j;
+        }
+    }
+    return m;
 }
 
 /* ---------- 4. 释放：只有两次 free（数据块 + 行指针数组） ---------- */
-void grid_free(int **m)
+    // 先申请行指针
+    // int **m = malloc(rows * sizeof(int*));
+    // // 再申请一大块连续的数据块
+    // m[0] = malloc(rows * cols * sizeof(int));
+    // // 让所有行指针都指向这块大内存的对应位置
+    // for(int i=1; i<rows; i++) m[i] = m[0] + i * cols;
+    void grid_free(int **m) 
 {
+    if (m == NULL) return;
     
+    free(m[0]);
+    free(m);
 }
 
 /* ---------- 5. 转置 ----------
@@ -52,8 +89,13 @@ void grid_free(int **m)
  */
 int **transpose(int **m, int rows, int cols)
 {
-    
-    return NULL;
+    int **t = grid_create(cols,rows);
+    for(int i = 0; i<cols ; i++){
+        for(int j = 0; j<rows ; j++){
+            t[i][j] = m[j][i];
+        }
+    }
+    return t;
 }
 
 /* ==================== 以下不要改 ==================== */
