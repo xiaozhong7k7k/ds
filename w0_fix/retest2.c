@@ -48,7 +48,7 @@ Node *reverse_rec(Node *head)
  */
 int **grid_create(int rows, int cols)
 {
-    // int **m = (int**)malloc(sizeof(int*)*rows);
+    // int **m = (int**)malloc(sizeof(int*)*rows);  我的旧写法
     // if(m == NULL){ return NULL; }
     // m[0] = (int*)malloc(sizeof(int)*rows*cols);
     // for(int i = 0; i<rows ; i++){

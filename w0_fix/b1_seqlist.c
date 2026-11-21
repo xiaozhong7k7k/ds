@@ -16,20 +16,72 @@ typedef struct {
  * 申请结构体 + cap 个 int 的数据区，size=0
  * 任何一步失败：已申请的释放干净，返回 NULL
  */
-SeqList *seq_create(int cap) {
-    /* TODO */
-    (void)cap;                /* 写好后删掉这行 */
-    return NULL;
+
+
+ //注意事项：申请空数据区的特别情况与申请失败的区别
+ //申请失败后的每一步回滚free
+SeqList *seq_create(int cap)
+{
+    SeqList *p = (SeqList*)malloc(sizeof(SeqList));
+    if(p == NULL){
+         return NULL;
+    }
+    if(cap == 0){//如果用户想建一个空数据区，防止返回NULL让别人以为申请失败
+        p->data = NULL;
+    }else{
+        p->data = (int*)malloc(sizeof(int)*cap);
+        if(p->data == NULL){
+            free(p->data);
+            p->data = NULL;
+            free(p);
+            p = NULL;
+            return NULL;
+        }
+    }
+    p->size = 0;
+    p->cap = cap;
+    return p;
 }
 
 /* ---------- 2. 尾部插入 ----------
  * 满了就扩容成原来的 2 倍（cap 为 0 时按 1 起步）
  * 成功返回 0，失败返回 -1
  */
-int seq_push_back(SeqList *L, int v) {
-    /* TODO */
-    (void)L; (void)v;         /* 写好后删掉这行 */
-    return -1;
+
+
+//注意事项：不要一开始就改动L的cap，先用newcap存起来
+//线性表申请内存的每一步判空和申请失败
+//往数据区填新数据的时候如果要扩容，记得拷贝老内存
+//灵活运用L->size，运用时分清楚下标和总个数的区别
+int seq_push_back(SeqList *L, int v)
+{
+    if(L == NULL){ return -1; }
+
+    //判断是否扩容
+    if(L->size == L->cap){
+        int newcap;
+        if(L->cap == 0){
+            newcap = 1;
+        }else{
+            newcap = L->cap*2;
+        }
+
+        int *new_data = (int*)malloc(sizeof(int)*newcap);
+        if(new_data == NULL){ return -1; }
+
+        for(int i = 0; i<L->size ; i++){
+            new_data[i] = L->data[i];
+        }
+
+        free(L->data);
+        L->data = new_data;
+        L->cap = newcap;
+    }
+
+    L->data[L->size] = v;
+    L->size++;
+
+    return 0;
 }
 
 /* ---------- 3. 在下标 idx 处插入 ----------
@@ -37,10 +89,38 @@ int seq_push_back(SeqList *L, int v) {
  * 后面的元素整体往后挪一格，返回「往后挪了几个元素」
  * idx 非法返回 -1；扩容失败返回 -1
  */
-int seq_insert(SeqList *L, int idx, int v) {
-    /* TODO */
-    (void)L; (void)idx; (void)v;   /* 写好后删掉这行 */
-    return -1;
+
+
+ //注意事项：扩容后要改变L->cap的大小，否则下次调用会在if那里出错导致内存出问题
+ //扩容直接翻倍，节省时间，用空间换时间
+ //扩容步骤是先申请一片新的内存，然后free老内存，再让原来指着老内存的指针指向新内存
+ //增删改一定要记得改L->size
+int seq_insert(SeqList *L, int idx, int v)
+{
+    if( idx<0 || idx>L->size){ return -1; }
+
+    if(L->size == L->cap){
+        int *newdata = (int*)malloc(sizeof(int)*(L->cap*2));
+        if(newdata == NULL){ return -1; }
+
+        for(int i = 0; i<L->size; i++){
+            newdata[i] = L->data[i];
+        }
+        free(L->data);
+        L->data = newdata;
+        L->cap *= 2;
+    }
+
+    int count = 0;
+    for(int i = L->size; i>idx; i--){
+        L->data[i] = L->data[i-1];
+        count++;
+    }
+
+    L->data[idx] = v;
+    L->size++;
+
+    return count;
 }
 
 /* ---------- 4. 删除下标 idx 处的元素 ----------
@@ -48,27 +128,48 @@ int seq_insert(SeqList *L, int idx, int v) {
  * 后面的元素整体往前挪一格，返回「往前挪了几个元素」
  * idx 非法返回 -1
  */
-int seq_erase(SeqList *L, int idx) {
-    /* TODO */
-    (void)L; (void)idx;       /* 写好后删掉这行 */
-    return -1;
+
+
+ //注意事项：注意for循环里的判断条件，增删直接用新数据覆盖老数据也可以得到删除的效果
+int seq_erase(SeqList *L, int idx)
+{
+    if(idx<0 || idx>=L->size){ return -1; }
+
+    int count = 0;
+    for(int i = idx; i<L->size-1 ; i++){
+        L->data[i] = L->data[i+1];
+        count++;
+    }
+    
+    L->size--;
+
+    return count;
 }
 
 /* ---------- 5. 查找 ----------
  * 找到返回下标，找不到返回 -1
  */
-int seq_find(SeqList *L, int v) {
-    /* TODO */
-    (void)L; (void)v;         /* 写好后删掉这行 */
+int seq_find(SeqList *L, int v)
+{
+    for(int i = 0; i<L->size ; i++){
+        if(L->data[i] == v){
+            return i;
+        }
+    }
+
     return -1;
 }
 
 /* ---------- 6. 销毁 ----------
  * 先 free 数据区，再 free 结构体本身
  */
-void seq_destroy(SeqList *L) {
-    /* TODO */
-    (void)L;                  /* 写好后删掉这行 */
+
+ //释放结构体的内存时，遵循先里后外的规则
+void seq_destroy(SeqList *L)
+{
+    free(L->data);
+    L->data = NULL;
+    free(L);
 }
 
 /* ==================== 以下不要改 ==================== */
