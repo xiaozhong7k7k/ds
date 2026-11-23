@@ -13,8 +13,8 @@
  * ============================================================ */
 
 /*笔记：1.头指针 ≠ 头结点。约定带头结点后，空表是 head != NULL && head->next == NULL，不是 head == NULL。
-2.malloc 不清零，新节点的 next 是随机值。所以不能 malloc 一个节点当游标，cur = cur->next 第一步就飞。
-3.新增节点必须写进前驱的 next 字段。p = prev->next; 只改栈上的局部指针，新节点没人指向，等于没接上，还泄漏。
+2.malloc 不清零，新节点的 next 是随机值。所以不能 malloc 一个节点当游标，需要初始化赋值为，head或其他节点
+3.新增节点必须写进前驱的 next 字段。p = prev->next(交换后就对); 只改栈上的局部指针，新节点没人指向，等于没接上，还泄漏。栈上指针在函数结束后成野指针
 4.删除节点不需要 malloc。只要让前驱跨过目标（prev->next = t->next），再 free(t)；断链只动已有节点的指针。
 5.遍历从头结点下一个开始（head->next），头结点的 val 没意义，读它就是未初始化内存。
 *
@@ -186,6 +186,7 @@ int list_erase(Node **head, int idx)
  */
 void list_print(Node *head)
 {
+    if(head == NULL){ return -1; }
     Node *cur = head->next;
 
     while(cur != NULL){
