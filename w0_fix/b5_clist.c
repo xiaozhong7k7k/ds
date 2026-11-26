@@ -77,7 +77,7 @@ int clist_insert(CNode *head, int idx, int val)
  * 删除 idx 位置的节点，值通过 *out 带回（out 可为 NULL）
  * 注意：尾节点的 next 是 head，不是 NULL
  */
-int clist_erase(CNode *head, int idx, int *out)
+int clist_erase(CNode *head, int idx, int *out)//idx的合理范围应该是 0 <= idx <len
 {
     if(idx<0){ return -1; }
     // CNode *dele_prev = head;//等于头节点还是首元节点只是因边界（如尾插）而异，循环的条件不会因此改变
@@ -99,8 +99,8 @@ int clist_erase(CNode *head, int idx, int *out)
     }
 
     CNode *cur = prev->next;
-    if(cur == head){ return -1; }
-    if(out != NULL){ *out = cur->val; }//如果这是idx等于len的情况我就是读头节点的值，再删除头节点，链表就找不到了
+    if(cur == head){ return -1; }//如果这是idx等于len的情况，我就是读头节点的值，再删除头节点，链表就找不到了
+    if(out != NULL){ *out = cur->val; }
 
     prev->next = cur->next;
     free(cur);

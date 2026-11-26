@@ -24,7 +24,7 @@
  *   destroy：void，连头结点一起释放
  *
  * 【所有权】
- *   节点由 insert malloc；由 erase / destroy free
+ *   节点由 insert malloc；由 erase / destroy free 
  *   测试自己建表、自己释放，不依赖你的 destroy（destroy 单独测）
  *
  * 规则：只填 4 个函数体，测试不要改。
@@ -45,7 +45,7 @@ typedef struct DNode {
 int dlist_insert(DNode *head, int idx, int val)
 {
     // DNode *temp = head->next;
-    //temp->prev = head;
+    // temp->prev = head;
 
     // for(int i = 0; i<idx && temp != NULL; i++){
     //         temp = temp->next;
@@ -54,6 +54,7 @@ int dlist_insert(DNode *head, int idx, int val)
     // if(temp == NULL){ return -1; }
     //错误原因 ( 边界条件 )：temp 从首元节点开始走，把「第 idx 个节点」当成插入点。当 idx == len 时，
     //这个节点并不存在，于是空表和尾插都被当成越界，直接 return -1
+    //所以插入需要把游标的初始化头指针而不是首元节点
     if(idx<0){ return -1; }
     DNode *prev = head;
 
@@ -67,7 +68,7 @@ int dlist_insert(DNode *head, int idx, int val)
     if(p == NULL){ return -1; }
 
     p->val = val;
-    p->prev = prev;
+    p->prev = prev;//先动新的，再动老的
     p->next = prev->next;
     if (prev->next != NULL) { prev->next->prev = p; }
     prev->next = p;
