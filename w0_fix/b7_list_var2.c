@@ -68,26 +68,41 @@ int has_cycle(Node *head)
  * 提示：先用快慢指针在环内相遇；相遇之后把一个指针放回 head，
  *       两个都改成一次走一步，再相遇的地方就是入口
  */
-Node *cycle_entry(Node *head)
+Node *cycle_entry(Node *head)//相遇和撞空
 {
-    if(head == NULL){ return NULL; }
-    if(has_cycle(head) == 0){ return NULL; }
+    // if(head == NULL){ return NULL; }
+    // if(has_cycle(head) == 0){ return NULL; }
 
     Node *fast = head;
     Node *slow = head;
     
-    do
-    {
-        fast = fast->next;
-        fast = fast->next;
-        slow = slow->next;
-    }while(fast != slow);
+    // do
+    // {
+    //     fast = fast->next;
+    //     fast = fast->next;
+    //     slow = slow->next;
+    // }while(fast != slow);
 
+    // slow = head;
+    // while(fast != slow){
+    //     fast = fast->next;
+    //     slow = slow->next;
+    // }
+
+    while(fast != NULL && fast->next != NULL){
+        fast = fast->next->next;
+        slow = slow->next;
+        if(slow == fast){ break; }//相遇
+    }
+
+    if(fast == NULL || fast->next == NULL){ return NULL; }//撞空
+    
     slow = head;
     while(fast != slow){
         fast = fast->next;
         slow = slow->next;
     }
+
     return fast;
 }
 
