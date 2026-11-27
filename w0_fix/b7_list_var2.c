@@ -45,10 +45,21 @@ typedef struct Node {
  * 提示：slow 走 1 步、fast 走 2 步；fast 先撞到 NULL 就是无环，
  *       某一刻 slow == fast 就是有环
  */
+
+ //我的选择是我写的这种，先判fast是不是空指针，防止对空指针进行解引用
 int has_cycle(Node *head)
 {
-    (void)head;
-    /* TODO */
+    if(head == NULL){ return 0; }
+    Node *fast = head;
+    Node *slow = head;
+
+    while( fast != NULL && fast->next != NULL ){
+        fast = fast->next;
+        fast = fast->next;
+        slow = slow->next;
+        if(fast == slow){ return 1; }
+    }
+
     return 0;
 }
 
@@ -59,9 +70,25 @@ int has_cycle(Node *head)
  */
 Node *cycle_entry(Node *head)
 {
-    (void)head;
-    /* TODO */
-    return NULL;
+    if(head == NULL){ return NULL; }
+    if(has_cycle(head) == 0){ return NULL; }
+
+    Node *fast = head;
+    Node *slow = head;
+    
+    do
+    {
+        fast = fast->next;
+        fast = fast->next;
+        slow = slow->next;
+    }while(fast != slow);
+
+    slow = head;
+    while(fast != slow){
+        fast = fast->next;
+        slow = slow->next;
+    }
+    return fast;
 }
 
 /* ---------- 3. 删倒数第 k 个 ----------
@@ -72,8 +99,31 @@ Node *cycle_entry(Node *head)
  */
 Node *remove_nth_from_end(Node *head, int k)
 {
-    (void)head; (void)k;
-    /* TODO */
+    if(k <= 0 ){ return head; }
+
+    Node *fast = head;
+    Node *prev = NULL;
+    for(int i = 0; i<k ; i++){
+        prev = fast;
+        if(prev == NULL){ return head; }//这里用prev作循环判断而不是fast本身是因为要考虑到 k = len的情况
+        fast = fast->next;
+    }
+
+    prev = NULL;//这次prev在for循环外，所以出了for循环重置一下
+    Node *cur = head;
+    while(fast != NULL){
+        prev = cur;
+        cur = cur->next;
+        fast = fast->next;
+    }
+
+    if(prev == NULL){ 
+        head = cur->next;
+        free(cur);
+    }else{
+        prev->next = cur->next;
+        free(cur);
+    }
     return head;
 }
 
@@ -85,8 +135,15 @@ Node *remove_nth_from_end(Node *head, int k)
  */
 Node *remove_dups_sorted(Node *head)
 {
-    (void)head;
-    /* TODO */
+    Node *cur = head;
+    while(cur != NULL && cur->next != NULL){
+        while(cur->next != NULL && cur->val == cur->next->val){
+            Node *next = cur->next;
+            cur->next = next->next;
+            free(next);//这里不写cur->next，因为上面已经改过赋值了，这么写会导致重复节点丢失，释放非重复节点
+        }
+        cur = cur->next;
+    }
     return head;
 }
 
